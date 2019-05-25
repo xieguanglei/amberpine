@@ -1,0 +1,22 @@
+{
+  "name": "amberpine",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.js",
+  "bin": {
+    "abp": "src/cli.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "^8.0.1",
+    "jade": "^1.11.0",
+    "lodash": "^4.17.11",
+    "marked": "0.3.6",
+    "ncp": "^2.0.0",
+    "rss": "^1.2.2",
+    "util-promisifyall": "^1.0.6",
+    "yaml-js": "^0.2.3"
+  }
+}

@@ -1,0 +1,36 @@
+extends layout
+
+block siteinfo
+    if blog.author
+        meta(name='author' content=blog.author)
+    if blog.keywords
+        meta(name='keywords' content=blog.keywords)
+    if post.keywords
+        meta(name='keywords' content=post.keywords)
+    title= blog.title+'|'+post.title
+
+block style
+    link(href='../assets/index.css' rel='stylesheet')
+
+block header
+    #header
+        h1#title
+            a(href='/')= blog.title
+        .links
+            for key in Object.keys(blog.links)
+                a(href=blog.links[key] target='_blank')
+                    .iconfont(class='icon-'+key)
+
+block main
+    div#post
+        div.main
+            h3.date= post.date.getUTCFullYear()+'/'+(post.date.getUTCMonth()+1)+'/'+post.date.getUTCDate()
+            div!= post.main
+
+append script
+    if post.highlight
+        include highlight
+    if post.mathjax
+        include mathjax
+    if post.jsbin
+        include jsbin
