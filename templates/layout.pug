@@ -6,7 +6,8 @@ html(lang='zh')
         meta(charset='utf-8')
         block siteinfo
         block style
-        include ga
+        if blog.ga_id
+            include ga
     body
         block header
         #main
