@@ -29,7 +29,7 @@ async function amberpine(cwd) {
         await generateFeed(source, dist, blogMeta, postMetaList.filter(item => !item.hidden));
     }
 
-    await ncp(assets, path.join(dist, 'assets'));
+    await ncp(assets, path.join(dist, 'blog/assets'));
 }
 
 async function getBlogMeta(src) {
