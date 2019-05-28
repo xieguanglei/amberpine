@@ -1,0 +1,17 @@
+script.
+    const socket = new WebSocket('ws://127.0.0.1:8080/');
+    socket.onopen = function(){
+        const matched = location.href.match(/\/blog\/post\/(.+)\.html/);
+        if(matched && matched[1]){
+            socket.send(JSON.stringify({
+                type: 'init',
+                key: matched[1]
+            }));
+            socket.onmessage = function(e){
+                const data = JSON.parse(e.data);
+                if(data.type === 'refresh'){
+                    location.href = location.href;
+                }
+            };
+        }
+    }

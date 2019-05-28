@@ -1,0 +1,13 @@
+title: 我的博客
+description: 博客的描述，签名，箴言
+keywords:
+  - 关键字1
+  - 关键字2
+author: 作者
+url: http://xxxxxxxx.github.io/ # 网站地址，如果设置了 RSS 输出，将影响
+
+links:
+  rss: http://xxxxxxxx.github.io/blog/feed.xml # RSS 输出地址，通常是网站地址后加上 blog/feed.xml，不想输出 RSS 可删去此行
+  github: http://github.com/xxxxxxxx # 一个绝对链接
+  author: /blog/post/about.html # 一个相对链接
+
