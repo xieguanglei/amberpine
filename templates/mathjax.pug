@@ -2,15 +2,10 @@ script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/mathja
 script.
     MathJax.Hub.Config({
         jax: ["input/TeX","output/HTML-CSS"],
+        displayIndent: "2em",
         tex2jax: {
             inlineMath: [['$','$'], ['\\(','\\)']],
             processEscapes: true
-        },
-        TeX: {
-            equationNumbers: {
-                autoNumber: ["AMS"],
-                useLabelIds: true
-            }
         },
         "HTML-CSS": {
             linebreaks: {
