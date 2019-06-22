@@ -119,7 +119,7 @@ async function renderFeed(blogMeta, postMetaList) {
         feed.item({
             title: post.title,
             description: content,
-            url: `${blogMeta.site_url}post/${post.key}.html`,
+            url: `${blogMeta.url}blog/post/${post.key}.html`,
             guid: post.key,
             author: blogMeta.author,
             date: post.date
