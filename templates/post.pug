@@ -7,7 +7,7 @@ block siteinfo
         meta(name='keywords' content=blog.keywords)
     if post.keywords
         meta(name='keywords' content=post.keywords)
-    title= blog.title+'|'+post.title
+    title= blog.title+' | '+post.title
 
 block style
     link(href='../assets/index.css' rel='stylesheet')
@@ -24,7 +24,7 @@ block header
 block main
     div#post
         div.main
-            h3.date= post.date.getUTCFullYear()+'/'+(post.date.getUTCMonth()+1)+'/'+post.date.getUTCDate()
+            h3.date= post.date.getUTCFullYear()+'/'+((post.date.getUTCMonth()+1)<10 ? '0':'')+(post.date.getUTCMonth()+1)+'/'+(post.date.getUTCDate()<10?'0':'')+post.date.getUTCDate()
             div!= post.main
 
 append script

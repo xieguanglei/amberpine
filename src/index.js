@@ -6,15 +6,14 @@ const ncp = require('util').promisify(require('ncp').ncp);
 const yaml = require('yaml-js');
 const _ = require('lodash');
 const pug = require('pug');
-const marked = require('marked');
 const RSS = require('rss');
-
 
 const cwd = process.cwd();
 const sourceDir = path.join(cwd, 'source');
 const distDir = path.join(cwd, 'dist');
 const templateDir = path.join(__dirname, '../templates');
 const assetsDir = path.join(cwd, 'assets');
+const marked = require('./marked');
 
 async function amberpine(cwd) {
 

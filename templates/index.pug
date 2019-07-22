@@ -23,6 +23,6 @@ block main
     div#posts
         for post in postList
             div.post
-                span.date= post.date.getUTCFullYear()+'/'+(post.date.getUTCMonth()+1)+'/'+post.date.getUTCDate()
+                span.date= post.date.getUTCFullYear()+'/'+((post.date.getUTCMonth()+1)<10 ? '0':'')+(post.date.getUTCMonth()+1)+'/'+(post.date.getUTCDate()<10?'0':'')+post.date.getUTCDate()
                 span.title
                     a(href='blog/post/'+post.key+'.html')= post.title
