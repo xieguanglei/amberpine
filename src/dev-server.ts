@@ -6,7 +6,6 @@ import * as path from 'path';
 
 import { renderIndex, renderPost, renderFeed, getBlogMeta, getPostMetaList, getPostMeta, IBlogMeta, IPostMeta } from './index';
 
-
 const port = 8080;
 
 function devServer() {
@@ -38,6 +37,14 @@ function devServer() {
             res.send('no post matched');
             console.log('invalid path : ' + req.path);
         }
+    });
+
+    app.get('/blog/feed.xml', async (req: express.Request, res: express.Response): Promise<void> => {
+        const blogMeta: IBlogMeta = await getBlogMeta();
+        const postMetaList: Array<IPostMeta> = await getPostMetaList();
+
+        const content: string = await renderFeed(blogMeta, postMetaList);
+        res.send(content);
     });
 
     app.use('/blog/assets', express.static('assets'));

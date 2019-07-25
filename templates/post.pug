@@ -4,9 +4,7 @@ block siteinfo
     if blog.author
         meta(name='author' content=blog.author)
     if blog.keywords
-        meta(name='keywords' content=blog.keywords)
-    if post.keywords
-        meta(name='keywords' content=post.keywords)
+        meta(name='keywords' content=blog.keywords.join(','))
     title= blog.title+' | '+post.title
 
 block style
@@ -24,7 +22,8 @@ block header
 block main
     div#post
         div.main
-            h3.date= post.date.getUTCFullYear()+'/'+((post.date.getUTCMonth()+1)<10 ? '0':'')+(post.date.getUTCMonth()+1)+'/'+(post.date.getUTCDate()<10?'0':'')+post.date.getUTCDate()
+            if !post.hide_date
+                h3.date= post.date.getUTCFullYear()+'/'+((post.date.getUTCMonth()+1)<10 ? '0':'')+(post.date.getUTCMonth()+1)+'/'+(post.date.getUTCDate()<10?'0':'')+post.date.getUTCDate()
             div!= post.main
 
 append script

@@ -1,4 +1,15 @@
 import * as marked from 'marked';
+import { highlight, listLanguages } from 'highlight.js';
+
+marked.setOptions({
+    highlight: function (code, lang): string {
+        if (listLanguages().includes(lang)) {
+            return highlight(lang, code).value;
+        } else {
+            return code;
+        }
+    }
+});
 
 const renderer = new marked.Renderer();
 

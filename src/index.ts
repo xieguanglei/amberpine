@@ -31,7 +31,8 @@ export interface IPostMeta {
     keywords: Array<string>,
     mathjax: boolean,
     highlight: boolean,
-    hidden: boolean
+    hidden: boolean,
+    hide_date: boolean
 }
 
 const cwd = process.cwd();
@@ -46,7 +47,7 @@ async function amberpine(cwd: string): Promise<void> {
     const blogMeta: IBlogMeta = await getBlogMeta();
     const postMetaList: Array<IPostMeta> = await getPostMetaList();
 
-    await generateIndex(blogMeta, postMetaList.filter(item => !item.hidden));
+    await generateIndex(blogMeta, postMetaList);
     for (const post of postMetaList) {
         await generatePost(blogMeta, post);
     }
@@ -78,7 +79,18 @@ export async function getPostMetaList(): Promise<Array<IPostMeta>> {
 }
 export async function getPostMeta(key: string): Promise<IPostMeta> {
     let content = await fs.readFile(path.resolve(sourceDir, key, 'index.yaml'), 'utf-8');
-    return yaml.load(content) as IPostMeta;
+    const meta = yaml.load(content) as IPostMeta;
+    meta.key = key;
+    const mdStr: string = await fs.readFile(path.resolve(sourceDir, key, 'index.md'), 'utf-8');
+    const titleLine = mdStr.split('\n').find(line => line.startsWith('#'));
+    
+    if (titleLine) {
+        meta.title = titleLine.replace('#', '').trim();
+    } else {
+        meta.title = '无题';
+    }
+
+    return meta;
 }
 
 let renderIndexFunc: pug.compileTemplate = null;
@@ -92,7 +104,7 @@ export async function renderIndex(blogMeta, postMetaList): Promise<string> {
     }
     return renderIndexFunc({
         blog: blogMeta,
-        postList: postMetaList
+        postList: postMetaList.filter(meta => !meta.hidden)
     })
 }
 async function generateIndex(blogMeta, postMetaList): Promise<void> {
@@ -113,6 +125,7 @@ export async function renderPost(blogMeta: IBlogMeta, postMeta: IPostMeta): Prom
     }
     const mdStr: string = await fs.readFile(path.resolve(sourceDir, postMeta.key, 'index.md'), 'utf-8');
     const main: string = marked(mdStr);
+    blogMeta.keywords = [...blogMeta.keywords, ...postMeta.keywords];
     const content: string = renderPostFunc({
         blog: blogMeta,
         post: { ...postMeta, main: main }

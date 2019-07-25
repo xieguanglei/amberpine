@@ -1,6 +1,7 @@
-key: first-post # 必须和目录名一致
-title: 第一篇文章
 date: 2000-01-01
+keywords:
+- 关键词3
+- 关键词4
 
 mathjax: true # 若文中出现 Latex 格式的公式，可使用 mathjax 以进行排版。否则置为 false 或删去此行。
 highlight: true # 若文中出现代码，可使用 hightlight.js 进行高亮着色。否则置为 false 或删去此行。
