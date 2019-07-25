@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "outDir": "lib",
+        "target": "es5",
+        "types": ["node"]
+    },
+    "include": [
+        "src/**/*"
+    ]
+}

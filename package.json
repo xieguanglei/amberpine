@@ -1,10 +1,14 @@
 {
   "name": "amberpine",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "bin": {
-    "abp": "src/cli.js"
+    "abp": "lib/cli.js"
+  },
+  "scripts": {
+    "watch": "tsc --watch",
+    "prepublish": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +17,7 @@
     "express": "4.17.1",
     "express-ws": "4.0.0",
     "fs-extra": "8.0.1",
+    "js-yaml": "^3.13.1",
     "lodash": "4.17.15",
     "marked": "0.6.2",
     "ncp": "2.0.0",
@@ -21,5 +26,17 @@
     "rss": "1.2.2",
     "util-promisifyall": "1.0.6",
     "yaml-js": "0.2.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.0",
+    "@types/express-ws": "^3.0.0",
+    "@types/fs-extra": "^8.0.0",
+    "@types/js-yaml": "^3.12.1",
+    "@types/lodash": "^4.14.136",
+    "@types/marked": "^0.6.5",
+    "@types/ncp": "^2.0.1",
+    "@types/node": "^9.6.50",
+    "@types/pug": "^2.0.4",
+    "typescript": "^3.5.3"
   }
 }
