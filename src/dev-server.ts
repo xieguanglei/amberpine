@@ -1,8 +1,8 @@
-import * as express from 'express';
-import * as open from 'open';
-import * as expressWs from 'express-ws';
-import * as fs from 'fs-extra';
-import * as path from 'path';
+import express from 'express';
+import open from 'open';
+import expressWs from 'express-ws';
+import fs from 'fs-extra';
+import path from 'path';
 
 import { renderIndex, renderPost, renderFeed, getBlogMeta, getPostMetaList, getPostMeta, IBlogMeta, IPostMeta } from './index';
 

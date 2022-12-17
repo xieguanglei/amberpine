@@ -1,13 +1,10 @@
-import * as marked from 'marked';
-import { highlight, listLanguages } from 'highlight.js';
+import { marked } from 'marked';
+import hljs from 'highlight.js';
 
 marked.setOptions({
     highlight: function (code, lang): string {
-        if (listLanguages().includes(lang)) {
-            return highlight(lang, code).value;
-        } else {
-            return code;
-        }
+        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+        return hljs.highlight(code, { language }).value;
     }
 });
 
