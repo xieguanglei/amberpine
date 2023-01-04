@@ -14,8 +14,8 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm install
-      - run: echo $GITHUB_REF_NAME
       - run: npm run build
-      # - run: npm publish
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+      - run: npm version $GITHUB_REF_NAME --git-tag-version false
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
