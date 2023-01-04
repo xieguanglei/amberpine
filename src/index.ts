@@ -1,17 +1,13 @@
-import * as path from 'path';
-import * as util from 'util';
-import * as fs from 'fs-extra';
-import { ncp } from 'ncp';
-
-import * as yaml from 'js-yaml';
-import * as _ from 'lodash';
-
-import * as pug from 'pug';
-import * as RSS from 'rss';
+import path from 'path';
+import _ from 'lodash';
+import fs from 'fs-extra';
+import yaml from 'js-yaml';
+import pug from 'pug';
+import RSS from 'rss';
 
 import marked from './marked';
 
-export interface IBlogMeta {
+export type IBlogMeta = {
     title: string,
     description: string,
     keywords: Array<string>,
@@ -24,7 +20,7 @@ export interface IBlogMeta {
     }
 }
 
-export interface IPostMeta {
+export type IPostMeta = {
     key: string,
     title: string,
     date: string,
@@ -56,7 +52,7 @@ async function amberpine(cwd: string): Promise<void> {
         await generateFeed(blogMeta, postMetaList.filter(item => !item.hidden));
     }
 
-    await util.promisify(ncp)(assetsDir, path.join(distDir, 'blog/assets'));
+    await fs.copy(assetsDir, path.join(distDir, 'blog/assets'), { overwrite: true });
 }
 
 export async function getBlogMeta(): Promise<IBlogMeta> {
@@ -83,7 +79,7 @@ export async function getPostMeta(key: string): Promise<IPostMeta> {
     meta.key = key;
     const mdStr: string = await fs.readFile(path.resolve(sourceDir, key, 'index.md'), 'utf-8');
     const titleLine = mdStr.split('\n').find(line => line.startsWith('#'));
-    
+
     if (titleLine) {
         meta.title = titleLine.replace('#', '').trim();
     } else {
@@ -181,7 +177,7 @@ async function generateFeed(blogMeta: IBlogMeta, postMetaList: Array<IPostMeta>)
 }
 
 export async function init(cwd: string = process.cwd()) {
-    await util.promisify(ncp)(path.join(__dirname, '../init'), cwd);
+    await fs.copy(path.join(__dirname, '../init'), cwd, { overwrite: true });
     console.log('Initialize success');
 }
 
