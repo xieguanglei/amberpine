@@ -2,6 +2,7 @@
   "name": "amberpine",
   "version": "0.0.10",
   "description": "",
+  "type": "module",
   "main": "lib/index.js",
   "bin": {
     "abp": "lib/cli.js"
