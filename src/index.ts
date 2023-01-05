@@ -4,8 +4,10 @@ import fs from 'fs-extra';
 import yaml from 'js-yaml';
 import pug from 'pug';
 import RSS from 'rss';
-
+import { fileURLToPath } from 'url';
 import marked from './marked';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export type IBlogMeta = {
     title: string,
