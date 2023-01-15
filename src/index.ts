@@ -11,14 +11,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export type IBlogMeta = {
     title: string,
-    description: string,
-    keywords: Array<string>,
-    author: string,
-    url: string,
-    links: {
-        rss: string,
-        github: string,
-        author: string
+    description?: string,
+    keywords?: Array<string>,
+    author?: string,
+    url?: string,
+    links?: {
+        rss?: string,
+        github?: string,
+        author?: string
     }
 }
 
@@ -26,11 +26,11 @@ export type IPostMeta = {
     key: string,
     title: string,
     date: string,
-    keywords: Array<string>,
-    mathjax: boolean,
-    highlight: boolean,
-    hidden: boolean,
-    hide_date: boolean
+    keywords?: Array<string>,
+    mathjax?: boolean,
+    highlight?: boolean,
+    hidden?: boolean,
+    hide_date?: boolean
 }
 
 const cwd = process.cwd();
@@ -91,8 +91,8 @@ export async function getPostMeta(key: string): Promise<IPostMeta> {
     return meta;
 }
 
-let renderIndexFunc: pug.compileTemplate = null;
-export async function renderIndex(blogMeta, postMetaList): Promise<string> {
+let renderIndexFunc: pug.compileTemplate | null = null;
+export async function renderIndex(blogMeta: IBlogMeta, postMetaList: Array<IPostMeta>): Promise<string> {
     if (!renderIndexFunc) {
         const template: string = await fs.readFile(path.resolve(templateDir, 'index.pug'), 'utf-8');
         renderIndexFunc = pug.compile(template, {
@@ -105,14 +105,14 @@ export async function renderIndex(blogMeta, postMetaList): Promise<string> {
         postList: postMetaList.filter(meta => !meta.hidden)
     })
 }
-async function generateIndex(blogMeta, postMetaList): Promise<void> {
+async function generateIndex(blogMeta: IBlogMeta, postMetaList: Array<IPostMeta>): Promise<void> {
     const content: string = await renderIndex(blogMeta, postMetaList);
     await fs.ensureDir(distDir);
     await fs.writeFile(path.resolve(distDir, 'index.html'), content);
     console.log(`home -- index.html done.`);
 }
 
-let renderPostFunc: pug.compileTemplate = null;
+let renderPostFunc: pug.compileTemplate | null = null;
 export async function renderPost(blogMeta: IBlogMeta, postMeta: IPostMeta): Promise<string> {
     if (!renderPostFunc) {
         const template: string = await fs.readFile(path.resolve(templateDir, 'post.pug'), 'utf-8');
@@ -123,9 +123,11 @@ export async function renderPost(blogMeta: IBlogMeta, postMeta: IPostMeta): Prom
     }
     const mdStr: string = await fs.readFile(path.resolve(sourceDir, postMeta.key, 'index.md'), 'utf-8');
     const main: string = marked(mdStr);
-    blogMeta.keywords = [...blogMeta.keywords, ...postMeta.keywords];
     const content: string = renderPostFunc({
-        blog: blogMeta,
+        blog: {
+            ...blogMeta,
+            keywords: [...(blogMeta.keywords || []), ...(postMeta.keywords || [])]
+        },
         post: { ...postMeta, main: main }
     });
     return content;
@@ -142,8 +144,8 @@ export async function renderFeed(blogMeta: IBlogMeta, postMetaList: Array<IPostM
     const feed = new RSS({
         title: blogMeta.title,
         description: blogMeta.description,
-        feed_url: blogMeta.links.rss,
-        site_url: blogMeta.url
+        feed_url: blogMeta.links?.rss || '',
+        site_url: blogMeta.url || '',
     });
 
     postMetaList = postMetaList.splice(0, 5);

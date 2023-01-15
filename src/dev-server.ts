@@ -27,12 +27,14 @@ function devServer() {
 
         try {
             const matched = req.path.match(/\/blog\/post\/(.+)\.html/);
-            const key = matched[1];
-            const blogMeta: IBlogMeta = await getBlogMeta();
-            const postMeta: IPostMeta = await getPostMeta(key);
-            postMeta['devhr'] = true;
-            const content: string = await renderPost(blogMeta, postMeta);
-            res.send(content);
+            const key = (matched && matched[1]);
+            if (key) {
+                const blogMeta: IBlogMeta = await getBlogMeta();
+                const postMeta: IPostMeta = await getPostMeta(key);
+                (postMeta as any)['devhr'] = true;
+                const content: string = await renderPost(blogMeta, postMeta);
+                res.send(content);
+            }
         } catch (e) {
             res.send('no post matched');
             console.log('invalid path : ' + req.path);
