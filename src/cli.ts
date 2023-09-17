@@ -1,4 +1,4 @@
-#!/usr/bin/env node --experimental-specifier-resolution=node
+#!/usr/bin/env node
 
 import amberpine, { init } from './index.js';
 import devServer from './dev-server.js';
