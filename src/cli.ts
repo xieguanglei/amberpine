@@ -1,7 +1,7 @@
 #!/usr/bin/env node --experimental-specifier-resolution=node
 
-import amberpine, { init } from './index';
-import devServer from './dev-server';
+import amberpine, { init } from './index.js';
+import devServer from './dev-server.js';
 
 const [, , ...args] = process.argv;
 
