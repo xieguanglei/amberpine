@@ -4,7 +4,7 @@ import expressWs from 'express-ws';
 import fs from 'fs-extra';
 import path from 'path';
 
-import { renderIndex, renderPost, renderFeed, getBlogMeta, getPostMetaList, getPostMeta, IBlogMeta, IPostMeta } from './index';
+import { renderIndex, renderPost, renderFeed, getBlogMeta, getPostMetaList, getPostMeta, IBlogMeta, IPostMeta } from './index.js';
 
 const port = 8080;
 

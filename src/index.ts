@@ -5,7 +5,7 @@ import yaml from 'js-yaml';
 import pug from 'pug';
 import RSS from 'rss';
 import { fileURLToPath } from 'url';
-import marked from './marked';
+import marked from './marked.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
