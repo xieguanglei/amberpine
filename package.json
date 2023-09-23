@@ -8,7 +8,8 @@
     "abp": "lib/cli.js"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "build-watch": "tsc --watch"
   },
   "keywords": [],
   "author": "",

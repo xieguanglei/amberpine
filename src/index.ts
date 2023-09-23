@@ -153,7 +153,19 @@ export async function renderFeed(blogMeta: IBlogMeta, postMetaList: Array<IPostM
     for (const post of postMetaList) {
 
         let mdStr: string = await fs.readFile(path.resolve(sourceDir, post.key, 'index.md'), 'utf-8');
-        let content: string = await renderMarkdown(mdStr, { mathjax: post.mathjax });
+
+        const lines = mdStr.split('\n');
+
+        if (lines[0].startsWith('#')) {
+            lines.shift();
+        }
+        while (lines[0].trim() === '') {
+            lines.shift();
+        }
+
+        const text = lines.join('\n');
+
+        let content: string = await renderMarkdown(text, { mathjax: post.mathjax });
 
         feed.item({
             title: post.title,

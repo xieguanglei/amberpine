@@ -67,13 +67,9 @@ const withMathjax = <T extends any[]>(
                         } else {
                             let p = parts[i];
                             p = p.replaceAll('&amp;', '&');
-                            console.log('p==>', p);
                             transformed[i] = execSync(`node -r esm ${tex2mml} "${p}" --inline`, { cwd: __dirname }).toString();
                         }
                     }
-
-                    console.log(`transformed==>`, transformed);
-
 
                     text = transformed.join('');
                 }
