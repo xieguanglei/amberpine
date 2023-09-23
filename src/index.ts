@@ -5,7 +5,7 @@ import yaml from 'js-yaml';
 import pug from 'pug';
 import RSS from 'rss';
 import { fileURLToPath } from 'url';
-import marked from './marked.js';
+import { renderMarkdown } from './marked.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -122,7 +122,7 @@ export async function renderPost(blogMeta: IBlogMeta, postMeta: IPostMeta): Prom
         });
     }
     const mdStr: string = await fs.readFile(path.resolve(sourceDir, postMeta.key, 'index.md'), 'utf-8');
-    const main: string = marked(mdStr);
+    const main: string = await renderMarkdown(mdStr, { mathjax: postMeta.mathjax });
     const content: string = renderPostFunc({
         blog: {
             ...blogMeta,
@@ -153,7 +153,7 @@ export async function renderFeed(blogMeta: IBlogMeta, postMetaList: Array<IPostM
     for (const post of postMetaList) {
 
         let mdStr: string = await fs.readFile(path.resolve(sourceDir, post.key, 'index.md'), 'utf-8');
-        let content: string = marked(mdStr);
+        let content: string = await renderMarkdown(mdStr, { mathjax: post.mathjax });
 
         feed.item({
             title: post.title,

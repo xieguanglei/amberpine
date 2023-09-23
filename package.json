@@ -2,8 +2,8 @@
   "name": "amberpine",
   "version": "0.0.0",
   "description": "",
-  "type": "module",
   "main": "lib/index.js",
+  "type": "module",
   "bin": {
     "abp": "lib/cli.js"
   },
@@ -14,6 +14,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "esm": "^3.2.25",
+    "yargs": "^17.0.1",
     "express": "^4.18.2",
     "express-ws": "5.0.2",
     "fs-extra": "^9.1.0",
@@ -21,6 +23,7 @@
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "marked": "^4.2.4",
+    "mathjax-full": "^3.2.2",
     "open": "^8.4.0",
     "pug": "^3.0.2",
     "rss": "^1.2.2"
