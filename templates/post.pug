@@ -23,7 +23,7 @@ block main
     div#post
         div.main
             if !post.hide_date
-                h3.date= post.date.getUTCFullYear()+'/'+((post.date.getUTCMonth()+1)<10 ? '0':'')+(post.date.getUTCMonth()+1)+'/'+(post.date.getUTCDate()<10?'0':'')+post.date.getUTCDate()
+                h3.date= post.date.getUTCFullYear()+' / '+((post.date.getUTCMonth()+1)<10 ? '0':'')+(post.date.getUTCMonth()+1)+' / '+(post.date.getUTCDate()<10?'0':'')+post.date.getUTCDate()
             div!= post.main
 
 append script
