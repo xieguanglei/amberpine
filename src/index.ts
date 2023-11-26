@@ -122,7 +122,11 @@ export async function renderPost(blogMeta: IBlogMeta, postMeta: IPostMeta): Prom
         });
     }
     const mdStr: string = await fs.readFile(path.resolve(sourceDir, postMeta.key, 'index.md'), 'utf-8');
-    const main: string = await renderMarkdown(mdStr, { mathjax: postMeta.mathjax });
+    const main: string = await renderMarkdown(mdStr, { 
+        key: postMeta.key,
+        mathjax: !!postMeta.mathjax, 
+        postDir: path.resolve(sourceDir, postMeta.key) 
+    });
     const content: string = renderPostFunc({
         blog: {
             ...blogMeta,
@@ -165,7 +169,11 @@ export async function renderFeed(blogMeta: IBlogMeta, postMetaList: Array<IPostM
 
         const text = lines.join('\n');
 
-        let content: string = await renderMarkdown(text, { mathjax: post.mathjax });
+        let content: string = await renderMarkdown(text, { 
+            key: post.key,
+            mathjax: !!post.mathjax, 
+            postDir: path.resolve(sourceDir, post.key) 
+        }); 
 
         feed.item({
             title: post.title,
