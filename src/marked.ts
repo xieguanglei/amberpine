@@ -1,9 +1,18 @@
 import * as url from 'url';
+import * as path from 'path';
+import * as crypto from 'crypto';
+import fs from 'fs-extra';
 import { Renderer, marked } from 'marked';
 import hljs from 'highlight.js';
 import { execSync } from 'child_process';
 
-const currentRenderOptions = { mathjax: false };
+const currentRenderOptions = {
+    mathjax: false,
+    key: '',
+    postDir: ''
+};
+
+const cwd = process.cwd();
 
 marked.setOptions({
     highlight: function (code, lang): string {
@@ -16,6 +25,24 @@ const renderer = new marked.Renderer();
 
 const renderImage = renderer.image;
 renderer.image = function (href: string, title: string, text: string): string {
+
+    if (!href.includes('//')) {
+
+        const file = path.join(currentRenderOptions.postDir, href);
+
+        if (fs.existsSync(file)) {
+            const extName = path.extname(file);
+            const fileName = path.basename(file, extName);
+            const hashSource = currentRenderOptions.key + '__' + fileName;
+            const hash = crypto.createHash('sha1').update(hashSource).digest('base64url');
+            const outputName = hash + extName;
+
+            fs.ensureDirSync(path.join(cwd, 'dist/blog/post/assets'));
+            fs.copyFileSync(file, path.join(cwd, 'dist/blog/post/assets', outputName));
+
+            href = `/blog/post/assets/${outputName}`;
+        }
+    }
 
     const origin: string = renderImage.call(this, href, title, text);
 
@@ -103,9 +130,11 @@ renderer.listitem = withMathjax(
 
 
 
-export const renderMarkdown = (source: string, options: { mathjax?: boolean } = {}): string => {
+export const renderMarkdown = (source: string, options: typeof currentRenderOptions): string => {
 
-    currentRenderOptions.mathjax = !!options.mathjax;
+    currentRenderOptions.postDir = options.postDir;
+    currentRenderOptions.mathjax = options.mathjax;
+    currentRenderOptions.key = options.key;
 
     return marked(source, { renderer });
 };
