@@ -23,7 +23,7 @@ block main
     div#post
         div.main
             if !post.hide_date
-                h3.date= post.date.replace('-', ' / ')
+                h3.date= post.date.replaceAll('-', ' / ')
             div!= post.main
 
 append script

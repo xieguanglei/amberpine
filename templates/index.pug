@@ -23,6 +23,6 @@ block main
     div#posts
         for post in postList
             div.post
-                span.date= post.date.replace('-', ' / ')
+                span.date= post.date.replaceAll('-', ' / ')
                 span.title
                     a(href='blog/post/'+post.key+'.html')= post.title
