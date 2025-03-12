@@ -26,11 +26,12 @@ export type IPostMeta = {
     key: string,
     title: string,
     date: string,
+    path: string,
     keywords?: Array<string>,
     mathjax?: boolean,
     highlight?: boolean,
     hidden?: boolean,
-    hide_date?: boolean
+    hide_date?: boolean,
 }
 
 const cwd = process.cwd();
@@ -62,32 +63,29 @@ export async function getBlogMeta(): Promise<IBlogMeta> {
     return yaml.load(blogMetaString) as IBlogMeta;
 }
 export async function getPostMetaList(): Promise<Array<IPostMeta>> {
-    const files: Array<string> = await fs.readdir(sourceDir);
+    const dates: Array<string> = await fs.readdir(sourceDir);
     let res: Array<IPostMeta> = [];
-    for (let file of files) {
-        let stat = await fs.stat(path.resolve(sourceDir, file));
-        if (stat.isDirectory()) {
-            let meta = await getPostMeta(file);
-            res.push(meta);
+    for (let date of dates) {
+
+        if (!date.startsWith('.') && date.match(/^\d{4}-\d{2}-\d{2}$/) && (await fs.stat(path.resolve(sourceDir, date))).isDirectory()) {
+
+            const posts = await fs.readdir(path.resolve(sourceDir, date));
+            for (const post of posts) {
+                let meta = await getPostMeta(post, date);
+                res.push(meta);
+            }
         }
     }
     res = _.sortBy(res, r => r.date);
     res = _.reverse(res);
     return res;
 }
-export async function getPostMeta(key: string): Promise<IPostMeta> {
-    let content = await fs.readFile(path.resolve(sourceDir, key, 'index.yaml'), 'utf-8');
+export async function getPostMeta(title: string, date: string): Promise<IPostMeta> {
+    let content = await fs.readFile(path.resolve(sourceDir, date, title, 'index.yaml'), 'utf-8');
     const meta = yaml.load(content) as IPostMeta;
-    meta.key = key;
-    const mdStr: string = await fs.readFile(path.resolve(sourceDir, key, 'index.md'), 'utf-8');
-    const titleLine = mdStr.split('\n').find(line => line.startsWith('#'));
-
-    if (titleLine) {
-        meta.title = titleLine.replace('#', '').trim();
-    } else {
-        meta.title = '无题';
-    }
-
+    meta.key = meta.path;
+    meta.title = title;
+    meta.date = date;
     return meta;
 }
 
@@ -121,11 +119,11 @@ export async function renderPost(blogMeta: IBlogMeta, postMeta: IPostMeta): Prom
             pretty: true
         });
     }
-    const mdStr: string = await fs.readFile(path.resolve(sourceDir, postMeta.key, 'index.md'), 'utf-8');
-    const main: string = await renderMarkdown(mdStr, { 
+    const mdStr: string = await fs.readFile(path.resolve(sourceDir, postMeta.date, postMeta.title, 'index.md'), 'utf-8');
+    const main: string = await renderMarkdown(mdStr, {
         key: postMeta.key,
-        mathjax: !!postMeta.mathjax, 
-        postDir: path.resolve(sourceDir, postMeta.key) 
+        mathjax: !!postMeta.mathjax,
+        postDir: path.resolve(sourceDir, postMeta.date, postMeta.title)
     });
     const content: string = renderPostFunc({
         blog: {
@@ -156,7 +154,7 @@ export async function renderFeed(blogMeta: IBlogMeta, postMetaList: Array<IPostM
 
     for (const post of postMetaList) {
 
-        let mdStr: string = await fs.readFile(path.resolve(sourceDir, post.key, 'index.md'), 'utf-8');
+        let mdStr: string = await fs.readFile(path.resolve(sourceDir, post.date, post.title, 'index.md'), 'utf-8');
 
         const lines = mdStr.split('\n');
 
@@ -169,11 +167,11 @@ export async function renderFeed(blogMeta: IBlogMeta, postMetaList: Array<IPostM
 
         const text = lines.join('\n');
 
-        let content: string = await renderMarkdown(text, { 
+        let content: string = await renderMarkdown(text, {
             key: post.key,
-            mathjax: !!post.mathjax, 
-            postDir: path.resolve(sourceDir, post.key) 
-        }); 
+            mathjax: !!post.mathjax,
+            postDir: path.resolve(sourceDir, post.key)
+        });
 
         feed.item({
             title: post.title,
@@ -181,8 +179,8 @@ export async function renderFeed(blogMeta: IBlogMeta, postMetaList: Array<IPostM
             url: `${blogMeta.url}blog/post/${post.key}.html`,
             guid: post.key,
             author: blogMeta.author,
-            date: post.date
-        })
+            date: new Date(post.date)
+        });
     }
 
     const xml: string = feed.xml({

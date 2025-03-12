@@ -133,7 +133,7 @@ renderer.listitem = withMathjax(
 export const renderMarkdown = (source: string, options: typeof currentRenderOptions): string => {
 
     currentRenderOptions.postDir = options.postDir;
-    currentRenderOptions.mathjax = options.mathjax;
+    currentRenderOptions.mathjax = false; // options.mathjax;
     currentRenderOptions.key = options.key;
 
     return marked(source, { renderer });
